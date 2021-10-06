@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Sumar números botones dinámicos</h1>
+    <h2 style="color:red" id="resultado">0</h2>
+    <div id="contenedor"></div>
+    <script src="jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            for (var i = 1; i <= 10; i++){
+                var aleatorio = parseInt((Math.random() * 50) + 1);
+                var boton = $("<button>", {
+                    "value": aleatorio, "text": aleatorio
+                });
+                $("#contenedor").append(boton);
+                boton.click(function(){
+                    var suma = parseInt($("#resultado").text());
+                    //RECUPERAMOS EL VALOR DEL BOTON PULSADO
+                    var numero = parseInt($(this).val());
+                    suma += numero;
+                    $("#resultado").text(suma);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

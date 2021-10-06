@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Generar controles dinámicamente</h1>
+    <label>Introduzca un texto: </label> 
+    <input type="text" id="cajatexto"/>
+    <button id="botoncrear">
+        Crear título
+    </button>
+    <div id="padre"></div>
+    <script src="jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("h1").click(function() {
+                alert("Soy un H1");
+            });
+
+            $("#botoncrear").click(function(){
+                var texto = $("#cajatexto").val();
+                var h1 = $("<h1>", {
+                    "text": texto
+                    , "style": "color:blue"
+                });
+                h1.appendTo($("#padre"));
+                //AL PULSAR, QUEREMOS PONER EL VALOR ACTUAL
+                //DE LA CAJA DE TEXTO
+                h1.click(function() {
+                    var texto = $("#cajatexto").val();
+                    alert(texto);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

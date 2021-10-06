@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img{
+            width: 150px; height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Imagenes dinámicas</h1>
+    <label>Seleccione número de imágenes</label>
+    <input type="range" min="1" max="12" value="1"
+    id="rangoimagenes"/>
+    <div id="contenedor"></div>
+    <script src="jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#rangoimagenes").change(function() {
+                var numimagenes = parseInt($(this).val());
+                $("#contenedor").text("");
+                for (var i=1; i <= numimagenes; i++){
+                    var imagen = $("<img>", {
+                        "src": "images/batman.jpg"
+                    });
+                    $("#contenedor").append(imagen);
+                    imagen.mouseover(function(){
+                        //ESTE CODIGO ES OTRO CUANDO
+                        //INDEPENDIENTE
+                        //NO PODEMOS UTILIZAR VARIABLES DINAMICAS
+                        //ACCEDER AL OBJETO QUE HA REALIZADO LA LLAMADA
+                        $(this).attr("src", "images/joker.jpg");
+                    });
+                    imagen.mouseout(function(){
+                        $(this).attr("src", "images/batman.jpg");
+                    });                                    
+                }
+            });
+        });
+    </script>
+</body>
+</html>

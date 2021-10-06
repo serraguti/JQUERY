@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Ejemplo mayor tres números</h1>
+    <label>Número 1</label>
+    <input type="text" id="caja1"/>
+    <br/>
+    <label>Número 2</label>
+    <input type="text" id="caja2"/><br/>
+    <label>Número 3</label>
+    <input type="text" id="caja3"/>
+    <br/>
+    <button id="botonresultado">Mostrar resultado</button>
+    <div id="resultado"></div>
+    <script src="jquery-3.6.0.min.js"></script>
+    <script> 
+        $(document).ready(function(){
+            $("#botonresultado").click(function(){
+                console.log("Estoy aqui");
+                var num1 = parseInt($("#caja1").val());
+                var num2 = parseInt($("#caja2").val());
+                var num3 = parseInt($("#caja3").val());
+                console.log(num1);
+                var cajamayor;
+                var cajamenor;
+                var mayor = 0;
+                if (num1 >= num2 && num1 >= num3){
+                    mayor = num1;
+                    cajamayor = $("#caja1");
+                }else if (num2 >= num1 && num2 >= num3){
+                    mayor = num2;
+                    cajamayor = $("#caja2");
+                }else{
+                    mayor = num3;
+                    cajamayor = $("#caja3");
+                }
+                var menor = 0;
+                if (num1 <= num2 && num1 <= num3){
+                    menor = num1;
+                    cajamenor = $("#caja1");
+                }else if (num2 <= num1 && num2 <= num3){
+                    menor = num2;
+                    cajamenor = $("#caja2");
+                }else{
+                    menor = num3;
+                    cajamenor = $("#caja3");
+                }
+                cajamayor.css("color", "red");
+                cajamenor.css("color", "green");
+                var intermedio = (num1 + num2 + num3) - menor - mayor;
+                $("#resultado").html("<h1>Mayor " + mayor
+                + "</h1><h1>Menor: " + menor + "</h1><h1>Intermedio "
+                + intermedio + "</h1>");
+            });
+        });
+    </script>
+</body>
+</html>

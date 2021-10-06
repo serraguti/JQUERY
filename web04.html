@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Día de la semana</h1>
+    <label>Día </label>
+    <input type="text" id="cajadia"/><br/>
+    <label>Mes: </label>
+    <input type="text" id="cajames"/><br/>
+    <label>Año </label>
+    <input type="text" id="cajaanyo"/><br/>
+    <button id="botoncalcular">
+        Calcular día semana
+    </button>
+    <h1 style="color:blue" id="resultado"></h1>
+    <script src="jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#botoncalcular").click(function(){
+                var dia = parseInt($("#cajadia").val());
+                var mes = parseInt($("#cajames").val());
+                var anyo = parseInt($("#cajaanyo").val());
+                if (mes == 1){
+                    mes = 13;
+                    anyo -= 1;
+                }else if (mes == 2){
+                    mes = 14;
+                    anyo -= 1;
+                }
+                var op1, op2, op3, op4, op5, op6;
+                //1. Multiplicar el Mes más 1 por 3 y dividirlo entre 5
+                op1 = parseInt((mes + 1) * 3 / 5);
+                console.log("op1: " + op1);
+                //2. Dividir el año entre 4
+                op2 = parseInt(anyo / 4);
+                console.log("op2: " + op2);
+                //Dividir el año entre 100
+                op3 = parseInt(anyo / 100);
+                console.log("op3: " + op3);
+                //Dividir el año entre 400
+                op4 = parseInt(anyo / 400);
+                console.log("op4: " + op4);
+                //5. Sumar el dia, el doble del mes, el año
+                //, el resultado de la operación 1
+                //, el resultado de la operación 2
+                //, menos el resultado de la operación 3 
+                //más la operación 4 más 2.
+                op5 = parseInt(dia + (mes * 2) + anyo + op1 + op2 - op3 + op4 + 2);
+                console.log("op5: " + op5);
+                //Dividir el resultado anterior entre 7
+                op6 = parseInt(op5 / 7);
+                console.log("op6: " + op6);
+                //Restar el número del paso 5 
+                //con el número del paso 6 por 7.
+                var resultado = parseInt(op5 - (op6 * 7));
+                console.log("RESULTADO: " + resultado);
+                var diasemana = "FAIL";
+                if (resultado == 0){
+                    diasemana = "SABADO";
+                }else if (resultado == 1){
+                    diasemana = "DOMINGO";
+                }else if (resultado == 2){
+                    diasemana = "LUNES";
+                }else if (resultado == 3){
+                    diasemana = "MARTES";
+                }else if (resultado == 4){
+                    diasemana = "MIERCOLES";
+                }else if (resultado == 5){
+                    diasemana = "JUEVES";
+                }else if (resultado == 6){
+                    diasemana = "VIERNES";
+                }
+                $("#resultado").text(diasemana);
+            });
+        });
+    </script>
+</body>
+</html>

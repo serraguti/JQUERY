@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Leer atributos XML</h1>
+    <button type="button" id="botonleer">
+        Cargar datos hospitales
+    </button>
+    <table border="1" id="tabla">
+        <thead>
+            <tr>
+                <th>NOMBRE</th>
+                <th>DIRECCION</th>
+                <th>TELEFONO</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script src="jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#botonleer").click(function(){
+                $.get("documents/xml/hospital_atributos.xml"
+                , function(data){
+                    var html = "";
+                    $(data).find("HOSPITAL").each(function() {
+                        //PARA RECUPERAR EL VALOR DE UN ATRIBUTO
+                        // .attr("NAME")
+                        var nombre = $(this).attr("NOMBRE");
+                        var direccion = $(this).attr("DIRECCION");
+                        var telefono = $(this).attr("TELEFONO");
+                        html += "<tr>";
+                        html += "<td>" + nombre + "</td>";
+                        html += "<td>" + direccion + "</td>";
+                        html += "<td>" + telefono + "</td>";
+                        html += "</tr>";
+                    });
+                    $("#tabla tbody").html(html);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

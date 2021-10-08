@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Departamentos y acciones dinámicas XML</h1>
+    <div id="contenedor"></div>
+    <hr/>
+    <div id="detalles"></div>
+    <script src="jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.get("documents/xml/departamentosetiquetas.xml"
+            , function(data) {
+                //DEBEMOS RECORRER CADA NUMERO
+                $(data).find("NUMERO").each(function() {
+                    //RECUPERAMOS EL VALOR DE CADA TAG <NUMERO>
+                    var numero = $(this).text();
+                    var boton = $("<button>"
+                        ,{ "text": "Detalles " + numero
+                    , "data-numero": numero, "value": numero});
+                    $("#contenedor").append(boton);
+                    //ACTIVAMOS EL EVENTO PARA CADA BOTON
+                    boton.click(function(){
+                        //ESTE CODIGO ES INDEPENDIENTE A TODO
+                        //NO PODEMOS UTILIZAR NINGUNA VARIABLE
+                        //DEL READY
+                        //RECUPERAMOS EL VALOR DEL NUMERO DEL BOTON
+                        var numero = $(this).val();
+                        //ACCEDEMOS AL SERVICIO PARA BUSCAR
+                        //EL DEPARTAMENTO POR SU NUMERO
+                        $.get("documents/xml/departamentosetiquetas.xml"
+                        , function(data){
+                            $(data).find("DEPARTAMENTO").each(function(){
+                                var codigo = $(this).find("NUMERO").text();
+                                if (codigo == numero){
+                                    var nombre = 
+                                    $(this).find("NOMBRE").text();
+                                    var localidad = 
+                                    $(this).find("LOCALIDAD").text();
+                                    $("#detalles").html("<h1>Nombre: "
+                                        + nombre + ", Localidad: "
+                                        + localidad + "</h1>");
+                                }
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

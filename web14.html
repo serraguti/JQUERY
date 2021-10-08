@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>BUSQUEDAS XML</h1>
+    <label>Apellido: </label>
+    <input type="text" id="cajaapellido"/>
+    <button type="button" id="botonapellido">
+        Buscar apellidos
+    </button>
+    <hr/>
+    <label>CODIGO HOSPITAL</label>
+    <input type="text" id="cajahospital"/>
+    <button type="button" id="botonhospital">
+        Buscar Hospital
+    </button>
+    <hr/>
+    <div id="contenido"></div>
+    <script src="jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#botonapellido").click(function(){
+                var apellido = $("#cajaapellido").val();
+                $.get("documents/xml/empleados.xml", function(data){
+                    var filtro = "APELLIDO:contains(" + apellido + ")";
+                    var html = "";
+                    if ($(data).find(filtro).length == 0){
+                        html = "<h1 style='color:red'>"
+                            + "NO HAY APELLIDOS</h1>";
+                    }else{
+                        //RECORREMOS PORQUE DEVUELVE VARIOS ELEMENTOS
+                        $(data).find(filtro).each(function(){
+                            var ape = $(this).text();
+                            html += "<h1>" + ape + "</h1>";
+                        });
+                    }
+                    $("#contenido").html(html);
+                });
+            });
+
+            $("#botonhospital").click(function(){
+                var codigo = $("#cajahospital").val();
+                console.log(codigo);
+                $.get("documents/xml/hospital_atributos.xml"
+                , function(data){
+                    console.log("leyendo..");
+                    //HOSPITAL[HOSPITAL_COD=14]
+                    var filtro = "HOSPITAL[HOSPITAL_COD=" + codigo + "]";
+                    console.log(filtro);
+                    //CAPTURAMOS EL NODO DE HOSPITAL PARA POSTERIORMENTE
+                    //RECUPERAR LOS DATOS NECESARIOS
+                    var nodohospital = $(data).find(filtro).first();
+                    var nombre = nodohospital.attr("NOMBRE");
+                    $("#contenido").html("<h1>Resultado: " 
+                        + nombre + "</h1>");
+                });
+            });
+        });
+    </script>
+</body>
+</html>

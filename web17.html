@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Documento JSON simple</h1>
+    <button type="button" id="botonget">
+        Leer con getJson
+    </button>
+    <button type="button" id="botonajax">
+        Leer con Ajax
+    </button><hr/>
+    <div id="contenido"></div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#botonget").click(function() {
+                $.getJSON("documents/json/tareas.json", function(data){
+                    //key y value son nombres de variables
+                    //pueden tener cualquier nombre
+                    $.each(data, function(key, value){
+                        //key es la clave json
+                        //value es el valor json
+                        var h1 = $("<h1>", {
+                            "text": "Clave: "
+                            + key + ", Valor: " + value
+                        });
+                        $("#contenido").append(h1);
+                        //h1.appendTo($("#contenido"));
+                    });
+                });
+            });
+
+            $("#botonajax").click(function() {
+                $.ajax({
+                    "url": "documents/json/tareas.json"
+                    , "method": "GET"
+                    , "dataType": "json"
+                    , success: function(data){
+                        $.each(data, function(key, value){
+                            var h1 = $("<h1>",{
+                                "style": "color:red"
+                                , "text": "Clave: " + key 
+                                + ", Valor: " + value
+                            });
+                            $("#contenido").append(h1);
+                        });
+                    }, "error": function(){
+                        $("#contenido").text("Error del servicio");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

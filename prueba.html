@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Departamentos Cliente AJAX</h2>
+
+<div>
+    <label>Número: </label>
+    <input type="text" id="cajanumero" class="form-control"/>
+</div>
+<div>
+    <label>Nombre: </label>
+    <input type="text" id="cajanombre" class="form-control"/>
+</div>
+<div>
+    <label>Localidad: </label>
+    <input type="text" id="cajalocalidad" class="form-control"/>
+</div>
+<div>
+    <button type="button" id="botoninsertar" class="btn-success">
+        Insertar
+    </button>
+    <button type="button" id="botonmodificar" class="btn-info">
+        Modificar
+    </button>
+    <button type="button" id="botoneliminar" class="btn-danger">
+        Eliminar
+    </button>
+</div>
+<hr/>
+<table class="table table-bordered" id="tabladepartamentos">
+    <thead>
+        <tr>
+            <th>NUMERO</th>
+            <th>NOMBRE</th>
+            <th>LOCALIDAD</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<script src="js/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+        cargarDepartamentos();
+        $("#botoninsertar").click(function () {
+                var num = $("#cajanumero").val();
+                var nom = $("#cajanombre").val();
+                var loc = $("#cajalocalidad").val();
+                var urlapi = "https://localhost:44309/api/Departamentos";
+                //CREAR UN OBJETO DEPARTAMENTO (FORMATO XML)
+                var dept = new Object();
+                dept.IdDepartamento = num;
+                dept.Nombre = nom;
+                dept.Localidad = loc;
+                //CONVERTIMOS EL OBJETO A JSON
+                //var oSerializer = new XMLSerializer();
+                //var sXML = oSerializer.serializeToString(dept);
+                var deptXML = "<Departamento>"
+                    + "<IdDepartamento>" + num + "</IdDepartamento>"
+                    + "<Nombre>" + nom + "</Nombre>"
+                    + "<Localidad>" + loc + "</Localidad>"
+                    + "</Departamento>";
+                console.log(deptXML);
+                $.ajax({
+                    url: urlapi
+                    , type: "POST"
+                    , data: deptXML
+                    , contentType: "application/xml"
+                    , success: function () {
+                        console.log("Todo OK Jose Luis");
+                        $("#mensaje").text("Departamento insertado");
+                        //cargarDepartamentos();
+                    }
+                });
+            });
+    });
+
+    function cargarDepartamentos(){
+        var urlapi = "https://localhost:44309/api/Departamentos";
+        $.get(urlapi, function(data){
+            console.log(data);
+                    var html = "";
+                    $(data).each(function () {
+                        console.log("buff");
+                        var num = $(this).find("IdDepartamento").text();
+                        var nom = $(this).find("Nombre").text();
+                        var loc = $(this).find("Localidad").text();
+                        html += "<tr>";
+                        html += "<td>" + num + "</td>";
+                        html += "<td>" + nom + "</td>";
+                        html += "<td>" + loc + "</td>";
+                        html += "</tr>";
+                    });
+                    console.log(html);
+                    $("#tabladepartamentos tbody").html(html);
+        });
+
+    }
+        //RECUPERAR TODOS LOS DEPARTAMENTOS
+        function cargarDepartamentos1() {
+            console.log("Leyendo metodo");
+            var urlapi = "https://localhost:44309/api/Departamentos";
+            $.ajax({
+                url: urlapi
+                , dataType: "xml"
+                , contentType: "application/xml"                
+                , type: "GET"
+                , async: true
+                , error: function(e, b, error) { 
+                    console.log("Error " + e.response)
+                }                
+                , success: function (data) {
+                    console.log(data);
+                    var html = "";
+                    $(data).each(function () {
+                        console.log("buff");
+                        var num = $(this).find("IdDepartamento").text();
+                        var nom = $(this).find("Nombre").text();
+                        var loc = $(this).find("Localidad").text();
+                        html += "<tr>";
+                        html += "<td>" + num + "</td>";
+                        html += "<td>" + nom + "</td>";
+                        html += "<td>" + loc + "</td>";
+                        html += "</tr>";
+                    });
+                    console.log(html);
+                    $("#tabladepartamentos tbody").html(html);
+                }
+            });
+        }
+
+</script>
+
+</body>
+</html>

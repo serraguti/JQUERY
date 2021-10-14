@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Maestro detalle Servicio Empleados Departamentos</h1>    
+    <table border="1" id="tabladepartamentos">
+        <thead>
+            <tr>
+                <th>NUMERO</th>
+                <th>NOMBRE</th>
+                <th>LOCALIDAD</th>
+                <th>ACCION</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <hr/>
+    <table border="1" id="tablaempleados">
+        <thead>
+            <tr>
+                <td>APELLIDO</td>
+                <td>OFICIO</td>
+                <td>SALARO</td>
+                <td>DEPARTAMENTO</td>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>
+        var urldept = "https://apicruddepartamentoscore.azurewebsites.net/";
+        var urlemp = "https://apiempleadosspgs.azurewebsites.net/";
+        $(document).ready(function() {
+            var request = "/api/departamentos";
+            $.ajax({
+                "url": urldept + request
+                , "type": "GET"
+                , dataType: "json"
+                , success: function(data){
+                    $.each(data, function(index, dept){
+                        var tr = $("<tr>");
+                        var tdnum = $("<td>", { "text": dept.numero});
+                        var tdnom = $("<td>", { "text": dept.nombre});
+                        var tdloc = $("<td>", { "text": dept.localidad});
+                        var tdboton = $("<td>");
+                        tr.append(tdnum);
+                        tr.append(tdnom);
+                        tr.append(tdloc);
+                        tr.append(tdboton);
+                        var boton = $("<button>", {
+                            "text": "Empleados",
+                            "value": dept.numero
+                        });
+                        tdboton.append(boton);
+                        boton.click(function() {
+                            var numero = $(this).val();
+                            cargarEmpleados(numero);
+                        });
+                        $("#tabladepartamentos tbody").append(tr);
+                    });
+                }
+            });
+        });
+
+        function cargarEmpleados(iddept){
+            var request = "/api/empleados/empleadosdepartamento/" + iddept;
+            $.ajax({
+                "url": urlemp + request
+                , "type": "GET"
+                , success: function(data){
+                    var html = "";
+                    $.each(data, function(index, empleado){
+                        html += "<tr>";
+                        html += "<td>" + empleado.apellido + "</td>";
+                        html += "<td>" + empleado.oficio + "</td>";
+                        html += "<td>" + empleado.salario + "</td>";
+                        html += "<td>" + empleado.departamento + "</td>";
+                        html += "</tr>";
+                    });
+                    $("#tablaempleados tbody").html(html);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="css/bootstrap.min.css"
+    rel="stylesheet"/>
+</head>
+<body>
+    <h1>Buscador empleados Servicio Api</h1>
+    <label>Introduzca un salario</label>
+    <input type="text" id="cajasalario" class="form-control"/>
+    <button type="button" class="btn-success" id="botonbuscar">
+        Buscar empleados
+    </button>
+    <hr/>
+    <div id="detallesempleado"></div>
+    <hr/>
+    <table id="tablaempleados" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>APELLIDO</th>
+                <th>OFICIO</th>
+                <th>SALARIO</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        var urlempleados = "https://apiempleadosspgs.azurewebsites.net/";
+        $(document).ready(function() {
+            $("#botonbuscar").click(function() {
+                var salario = $("#cajasalario").val();
+                var request = "/api/Empleados/EmpleadosSalario/"
+                + salario;
+                $.ajax({
+                    "url": urlempleados + request
+                    , "type": "GET"
+                    , success: function(data){
+                        $("#tablaempleados tbody").empty();
+                        $.each(data, function(index, emp){
+                            var tr = $("<tr>");
+                            var tdape = $("<td>");
+                            var tdofi = $("<td>", {"text": emp.oficio});
+                            var tdsal = $("<td>", {"text": emp.salario});
+                            tr.append(tdape);
+                            tr.append(tdofi);
+                            tr.append(tdsal);
+                            var href = $("<a>", {
+                                "text": emp.apellido
+                                , "href": "#"
+                                , "data-idempleado": emp.idEmpleado
+                            });
+                            href.click(function(){
+                                var id = $(this).data("idempleado");
+                                console.log(id);
+                                var request = "/api/empleados/"
+                                 + id;
+                                $.ajax({
+                                    "url": urlempleados + request
+                                    , "type": "GET"
+                                    , success: function(data){
+var html = "<h1>" + data.apellido + "</h1>";
+html += "<h2>Oficio: " + data.oficio + "</h2>";
+html += "<h2>Departamento: " + data.departamento + "</h2>";
+$("#detallesempleado").html(html);
+                                    }
+                                });
+                            });
+                            tdape.append(href);
+                            $("#tablaempleados tbody").append(tr);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

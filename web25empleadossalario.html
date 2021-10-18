@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Incremento salarial oficios empleados</h1>
+    <label>Seleccione un oficio: </label>
+    <select id="selectoficios"></select>
+    <hr/>
+    <label>Incremento salarial: </label>
+    <input type="text" id="cajaincremento"/>
+    <hr/>
+    <button type="button" id="botonmostrar">
+        Mostrar empleados
+    </button>
+    <button type="button" id="botonincremento">
+        Incrementar salarios
+    </button>
+    <hr/>
+    <table id="tablaempleados">
+        <thead>
+            <tr>
+                <th>Apellido</th>
+                <th>Oficio</th>
+                <th>Salario</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        var urlapi = "https://apiempleadosaction.azurewebsites.net";
+        $(document).ready(function(){
+            var request = "/api/Empleados/GetOficios/oficios";
+            $.ajax({
+                "url": urlapi + request
+                , "type": "GET"
+                , success: function(data){
+                    $.each(data, function(key, value){
+                        var option = $("<option>", {
+                            "text": value
+                        });
+                        $("#selectoficios").append(option);
+                    });
+                }
+            });
+
+            $("#botonmostrar").click(function() {
+                var oficio = $("#selectoficios").val();
+                getEmpleadosOficio(oficio);
+            });
+
+            $("#botonincremento").click(function() {
+                var oficio = $("#selectoficios").val();
+                var incremento = $("#cajaincremento").val();
+                console.log("boton");
+                var request = "/api/Empleados/IncrementarSalarioOficios/"
+                + oficio + "/" + incremento;
+                $.ajax({
+                    "url": urlapi + request
+                    , "type": "PUT"
+                    , success: function() {
+                        console.log("Incrementando...");
+                        getEmpleadosOficio(oficio);
+                    }
+                });
+            });
+        });
+
+        function getEmpleadosOficio(oficio){
+            var request = "/api/Empleados/GetEmpleadosOficio/empleadosoficio/"
+            + oficio;
+            $.ajax({
+                "url": urlapi + request
+                , "type": "GET"
+                , success: function(data){
+                    var html = "";
+                    $.each(data, function(index, empleado){
+                        html += "<tr>";
+                        html += "<td>" + empleado.apellido + "</td>";
+                        html += "<td>" + empleado.oficio + "</td>";
+                        html += "<td style='color:red'>" 
+                        + empleado.salario + "</td>";
+                        html += "</tr>";
+                    });
+                    $("#tablaempleados tbody").html(html);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
